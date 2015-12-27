@@ -26,8 +26,8 @@
         float2 _NoiseFrequency;
         float2 _NoiseMotion;
 
-        float4 _Point0;
-        float4 _Point1;
+        float4 _Point0;     // x, y, z, radius
+        float4 _Point1;     // x, y, z, radius
         fixed4 _Color;
 
         // pseudo random number generator
@@ -78,8 +78,8 @@
             lp = lerp(t1, lp, seglen);
 
             // start point, end point
-            float3 p0 = _Point0.xyz + random_point(seed + t0, 10) * _Point0.w;
-            float3 p1 = _Point1.xyz + random_point(seed + t0, 20) * _Point1.w;
+            float3 p0 = _Point0.xyz + random_point(seed + t0, 10) * _Point0.w * 2;
+            float3 p1 = _Point1.xyz + random_point(seed + t0, 20) * _Point1.w * 2;
 
             // get displacement of the current point
             float dx = displace(lp + seed * 100, t0 * 10 + t);

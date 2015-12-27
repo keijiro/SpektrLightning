@@ -13,13 +13,28 @@ namespace Spektr
 
         [Space]
         [SerializeField]
-        Vector3 _pointFrom = Vector3.zero;
+        Vector3 _emitterPosition = Vector3.right * -5;
+
+        public Vector3 emitterPosition {
+            get { return _emitterPosition; }
+            set { _emitterPosition = value; }
+        }
 
         [SerializeField]
-        Vector3 _pointTo = Vector3.up * 5;
+        Vector3 _receiverPosition = Vector3.right * 5;
+
+        public Vector3 receiverPosition {
+            get { return _receiverPosition; }
+            set { _receiverPosition = value; }
+        }
 
         [SerializeField]
-        float _spread = 1.0f;
+        float _pointSpread = 1.0f;
+
+        public float pointSpread {
+            get { return _pointSpread; }
+            set { _pointSpread = value; }
+        }
 
         [Space]
         [SerializeField]
@@ -64,10 +79,15 @@ namespace Spektr
 
         #endregion
 
-        #region Private Variables
+        #region Private Variables and Methods
 
         Material _material;
         MaterialPropertyBlock _materialProps;
+
+        static Vector4 MakeVector4(Vector3 v, float s)
+        {
+            return new Vector4(v.x, v.y, v.z, s);
+        }
 
         #endregion
 
@@ -84,11 +104,11 @@ namespace Spektr
             if (_materialProps == null)
                 _materialProps = new MaterialPropertyBlock();
 
-            _material.SetVector("_Point0",
-                new Vector4(_pointFrom.x, _pointFrom.y, _pointFrom.z, _spread));
+            var p0 = transform.InverseTransformPoint(_emitterPosition);
+            var p1 = transform.InverseTransformPoint(_receiverPosition);
 
-            _material.SetVector("_Point1",
-                new Vector4(_pointTo.x, _pointTo.y, _pointTo.z, _spread));
+            _material.SetVector("_Point0", MakeVector4(p0, _pointSpread));
+            _material.SetVector("_Point1", MakeVector4(p1, _pointSpread));
 
             _material.SetVector("_Interval", new Vector2(0.01f, _interval - 0.01f));
             _material.SetVector("_Length", new Vector2(1 - _lengthRandomness, 1) * _length);
@@ -101,6 +121,13 @@ namespace Spektr
             Graphics.DrawMesh(
                 _mesh.sharedMesh, transform.localToWorldMatrix,
                 _material, 0, null, 0, _materialProps);
+        }
+
+        void OnDrawGizmos()
+        {
+            Gizmos.color = new Color(1, 1, 0, 0.2f);
+            Gizmos.DrawSphere(_emitterPosition, _pointSpread);
+            Gizmos.DrawSphere(_receiverPosition, _pointSpread);
         }
 
         #endregion
