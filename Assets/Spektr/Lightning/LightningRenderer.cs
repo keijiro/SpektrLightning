@@ -28,14 +28,6 @@ namespace Spektr
             set { _receiverPosition = value; }
         }
 
-        [SerializeField]
-        float _pointSpread = 1.0f;
-
-        public float pointSpread {
-            get { return _pointSpread; }
-            set { _pointSpread = value; }
-        }
-
         [Space]
         [SerializeField]
         float _interval = 0.4f;
@@ -84,11 +76,6 @@ namespace Spektr
         Material _material;
         MaterialPropertyBlock _materialProps;
 
-        static Vector4 MakeVector4(Vector3 v, float s)
-        {
-            return new Vector4(v.x, v.y, v.z, s);
-        }
-
         #endregion
 
         #region MonoBehaviour Functions
@@ -108,8 +95,8 @@ namespace Spektr
             var p0 = transform.InverseTransformPoint(_emitterPosition);
             var p1 = transform.InverseTransformPoint(_receiverPosition);
 
-            _material.SetVector("_Point0", MakeVector4(p0, _pointSpread));
-            _material.SetVector("_Point1", MakeVector4(p1, _pointSpread));
+            _material.SetVector("_Point0", p0);
+            _material.SetVector("_Point1", p1);
 
             // make orthogonal axes
             var v0 = (p1 - p0).normalized;
@@ -117,8 +104,9 @@ namespace Spektr
             var v1 = Vector3.Cross(v0, v0s).normalized;
             var v2 = Vector3.Cross(v0, v1);
 
-            _material.SetVector("_Axis0", v1);
-            _material.SetVector("_Axis1", v2);
+            _material.SetVector("_Axis0", v0);
+            _material.SetVector("_Axis1", v1);
+            _material.SetVector("_Axis2", v2);
 
             // other params
             _material.SetVector("_Interval", new Vector2(0.01f, _interval - 0.01f));
@@ -139,8 +127,8 @@ namespace Spektr
         void OnDrawGizmos()
         {
             Gizmos.color = new Color(1, 1, 0, 0.2f);
-            Gizmos.DrawSphere(_emitterPosition, _pointSpread);
-            Gizmos.DrawSphere(_receiverPosition, _pointSpread);
+            Gizmos.DrawSphere(_emitterPosition, _noiseAmplitude1);
+            Gizmos.DrawSphere(_receiverPosition, _noiseAmplitude1);
         }
 
         #endregion

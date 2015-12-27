@@ -19,11 +19,12 @@
             fixed4 color : COLOR;
         };
 
-        float4 _Point0;     // x, y, z, radius
-        float4 _Point1;     // x, y, z, radius
+        float3 _Point0;
+        float3 _Point1;
 
         float3 _Axis0;
         float3 _Axis1;
+        float3 _Axis2;
 
         float2 _Interval;   // min, max
         float2 _Length;     // min, max
@@ -35,19 +36,15 @@
         fixed4 _Color;
 
         // pseudo random number generator
-        float nrand(float seed, float salt)
+        float nrand01(float seed, float salt)
         {
             float2 uv = float2(seed, salt);
             return frac(sin(dot(uv, float2(12.9898, 78.233))) * 43758.5453);
         }
 
-        // random point distributed in a unit cube
-        float3 random_point(float seed, float salt)
+        float nrand11(float seed, float salt)
         {
-            float rx = nrand(seed, salt);
-            float ry = nrand(seed, salt + 1);
-            float rz = nrand(seed, salt + 2);
-            return float3(rx, ry, rz) - 0.5;
+            return nrand01(seed, salt) * 2 - 1;
         }
 
         // displacement function
@@ -61,7 +58,7 @@
         // vertex intensity function
         float intensity(float seed)
         {
-            return (nrand(seed, 30) > 0.9) * nrand(seed, 31) - 0.01;
+            return (nrand01(seed, 30) > 0.9) * nrand01(seed, 31) - 0.01;
         }
 
         void vert(inout appdata_full v)
@@ -70,7 +67,7 @@
             float seed = v.vertex.y;    // random seed
 
             // animation interval
-            float interval = lerp(_Interval.x, _Interval.y, nrand(seed, 0));
+            float interval = lerp(_Interval.x, _Interval.y, nrand01(seed, 0));
 
             float t = _Time.y;          // absolute time
             float tpi = t / interval;
@@ -78,19 +75,19 @@
             float t0 = floor(tpi);      // interval count
 
             // modify lp with segment length parameters
-            float seglen = lerp(_Length.x, _Length.y, nrand(seed + t0, 1));
+            float seglen = lerp(_Length.x, _Length.y, nrand01(seed + t0, 1));
             lp = lerp(t1, lp, seglen);
 
             // start point, end point
-            float3 p0 = _Point0.xyz + random_point(seed + t0, 10) * _Point0.w * 2;
-            float3 p1 = _Point1.xyz + random_point(seed + t0, 20) * _Point1.w * 2;
+            float3 p0 = _Point0 + _Axis0 * nrand11(seed + t0, 2) * _NoiseAmplitude.x;
+            float3 p1 = _Point1 + _Axis0 * nrand11(seed + t0, 3) * _NoiseAmplitude.x;
 
             // get displacement of the current point
             float d0 = displace(lp + seed * 100, t0 * 10 + t);
             float d1 = displace(lp - seed * 100, t0 * 10 + t);
 
             // calculate the position
-            v.vertex.xyz = lerp(p0, p1, lp) + _Axis0 * d0 + _Axis1 * d1;
+            v.vertex.xyz = lerp(p0, p1, lp) + _Axis1 * d0 + _Axis2 * d1;
 
             // intensity at this vertex
             v.color = _Color * intensity(t0 + seed);

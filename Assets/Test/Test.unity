@@ -143,7 +143,6 @@ MonoBehaviour:
   _mesh: {fileID: 11400000, guid: ae28d7200908fb34ab683612d325defa, type: 2}
   _emitterPosition: {x: -8, y: 0, z: 0}
   _receiverPosition: {x: 8, y: 0, z: 0}
-  _pointSpread: 1
   _interval: .200000003
   _length: .850000024
   _lengthRandomness: .800000012

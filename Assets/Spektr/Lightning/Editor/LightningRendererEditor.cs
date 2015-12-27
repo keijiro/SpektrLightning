@@ -23,15 +23,11 @@ namespace Spektr
 
             var p0 = instance.emitterPosition;
             var p1 = instance.receiverPosition;
-            var r = instance.pointSpread;
 
             Handles.color = Color.red;
 
             Handles.Label(p0, "Emitter", _labelStyle);
             Handles.Label(p1, "Receiver", _labelStyle);
-
-            r = Handles.RadiusHandle(Quaternion.identity, p0, r);
-            r = Handles.RadiusHandle(Quaternion.identity, p1, r);
 
             p0 = Handles.PositionHandle(p0, Quaternion.identity);
             p1 = Handles.PositionHandle(p1, Quaternion.identity);
@@ -42,12 +38,9 @@ namespace Spektr
 
                 instance.emitterPosition = p0;
                 instance.receiverPosition = p1;
-                instance.pointSpread = r;
 
                 EditorUtility.SetDirty(target);
             }
         }
     }
 }
-
-
