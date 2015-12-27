@@ -19,6 +19,12 @@
             fixed4 color : COLOR;
         };
 
+        float4 _Point0;     // x, y, z, radius
+        float4 _Point1;     // x, y, z, radius
+
+        float3 _Axis0;
+        float3 _Axis1;
+
         float2 _Interval;   // min, max
         float2 _Length;     // min, max
 
@@ -26,8 +32,6 @@
         float2 _NoiseFrequency;
         float2 _NoiseMotion;
 
-        float4 _Point0;     // x, y, z, radius
-        float4 _Point1;     // x, y, z, radius
         fixed4 _Color;
 
         // pseudo random number generator
@@ -82,11 +86,11 @@
             float3 p1 = _Point1.xyz + random_point(seed + t0, 20) * _Point1.w * 2;
 
             // get displacement of the current point
-            float dx = displace(lp + seed * 100, t0 * 10 + t);
-            float dy = displace(lp - seed * 100, t0 * 10 + t);
+            float d0 = displace(lp + seed * 100, t0 * 10 + t);
+            float d1 = displace(lp - seed * 100, t0 * 10 + t);
 
             // calculate the position
-            v.vertex.xyz = lerp(p0, p1, lp) + float3(0, dx, dy);
+            v.vertex.xyz = lerp(p0, p1, lp) + _Axis0 * d0 + _Axis1 * d1;
 
             // intensity at this vertex
             v.color = _Color * intensity(t0 + seed);
