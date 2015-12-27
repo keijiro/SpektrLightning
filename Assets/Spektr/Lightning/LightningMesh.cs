@@ -8,7 +8,14 @@ namespace Spektr
         #region Public Properties
 
         [SerializeField]
-        int _vertexCount = 64;
+        int _lineCount = 24;
+
+        public int lineCount {
+            get { return _lineCount; }
+        }
+
+        [SerializeField]
+        int _vertexCount = 32;
 
         public int vertexCount {
             get { return _vertexCount; }
@@ -35,19 +42,31 @@ namespace Spektr
 
             _mesh.Clear();
 
-            var varray = new Vector3[_vertexCount];
-            var iarray = new int[_vertexCount];
+            var lcount = Mathf.Max(_lineCount, 1);
+            var vcount = Mathf.Max(_vertexCount, 2);
 
-            for (var vi = 0; vi < _vertexCount; vi++)
+            var varray = new List<Vector3>(lcount * vcount);
+            var iarray = new List<int>(lcount * (vcount - 1) * 2);
+
+            for (var li = 0; li < lcount; li++)
+                for (var vi = 0; vi < vcount; vi++)
+                    varray.Add(new Vector3((float)vi / (vcount - 1), li + 1, 0));
+
+            for (var li = 0; li < lcount; li++)
             {
-                varray[vi] = Vector3.right * ((float)vi / (_vertexCount - 1));
-                iarray[vi] = vi;
+                for (var vi = 0; vi < vcount - 1; vi++)
+                {
+                    var i = li * vcount + vi;
+                    iarray.Add(i);
+                    iarray.Add(i + 1);
+                }
             }
 
-            _mesh.vertices = varray;
-            _mesh.SetIndices(iarray, MeshTopology.LineStrip, 0);
+            _mesh.SetVertices(varray);
+            _mesh.SetIndices(iarray.ToArray(), MeshTopology.Lines, 0);
 
-            _mesh.bounds = new Bounds(Vector3.zero, Vector3.one * 100);
+            // very bad way to avoid being culled. don't do at home.
+            _mesh.bounds = new Bounds(Vector3.zero, Vector3.one * 1000);
 
             _mesh.Optimize();
             _mesh.UploadMeshData(true);

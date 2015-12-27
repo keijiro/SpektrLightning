@@ -19,68 +19,82 @@
             fixed4 color : COLOR;
         };
 
-        float2 _Interval;           // min, max
+        float2 _Interval;   // min, max
+        float2 _Length;     // min, max
+
         float2 _NoiseAmplitude;
         float2 _NoiseFrequency;
         float2 _NoiseMotion;
-        float _RandomSeed;
 
-        float3 _Point0;
-        float3 _Point1;
+        float4 _Point0;
+        float4 _Point1;
         fixed4 _Color;
 
         // pseudo random number generator
-        float nrand(float2 uv, float salt)
+        float nrand(float seed, float salt)
         {
-            uv += float2(_RandomSeed, salt);
+            float2 uv = float2(seed, salt);
             return frac(sin(dot(uv, float2(12.9898, 78.233))) * 43758.5453);
+        }
+
+        // random point distributed in a unit cube
+        float3 random_point(float seed, float salt)
+        {
+            float rx = nrand(seed, salt);
+            float ry = nrand(seed, salt + 1);
+            float rz = nrand(seed, salt + 2);
+            return float3(rx, ry, rz) - 0.5;
         }
 
         // displacement function
         float displace(float p, float t)
         {
-            float offs = _RandomSeed * 1000;
             return
-                snoise(float2(_NoiseFrequency.x * p + offs, t * _NoiseMotion.x)) * _NoiseAmplitude.x +
-                snoise(float2(_NoiseFrequency.y * p + offs, t * _NoiseMotion.y)) * _NoiseAmplitude.y;
+                snoise(float2(_NoiseFrequency.x * p, t * _NoiseMotion.x)) * _NoiseAmplitude.x +
+                snoise(float2(_NoiseFrequency.y * p, t * _NoiseMotion.y)) * _NoiseAmplitude.y;
         }
 
-        float intensity(float t0)
+        // vertex intensity function
+        float intensity(float seed)
         {
-            return (nrand(t0 + _RandomSeed, 3) > 0.8) * nrand(t0 + _RandomSeed, 5);
-//            return abs(snoise(float2(t * 8 + _RandomSeed, offs))) * (nrand(t2) > 0.5);
+            return (nrand(seed, 30) > 0.9) * nrand(seed, 31) - 0.01;
         }
 
         void vert(inout appdata_full v)
         {
+            float lp   = v.vertex.x;    // parameter on the line segment
+            float seed = v.vertex.y;    // random seed
+
             // animation interval
-            float interval = lerp(_Interval.x, _Interval.y, nrand(0, 0));
+            float interval = lerp(_Interval.x, _Interval.y, nrand(seed, 0));
 
-            // absolute time
-            float t = _Time.y;
+            float t = _Time.y;          // absolute time
+            float tpi = t / interval;
+            float t1 = frac(tpi);       // time parameter [0 - 1]
+            float t0 = floor(tpi);      // interval count
 
-            // start time of the current interval
-            float t0 = floor(t / interval) * interval;
+            // modify lp with segment length parameters
+            float seglen = lerp(_Length.x, _Length.y, nrand(seed + t0, 1));
+            lp = lerp(t1, lp, seglen);
 
-            // parameter of the current point
-            float lp = v.vertex.x;
+            // start point, end point
+            float3 p0 = _Point0.xyz + random_point(seed + t0, 10) * _Point0.w;
+            float3 p1 = _Point1.xyz + random_point(seed + t0, 20) * _Point1.w;
 
             // get displacement of the current point
-            float dt = (t - t0) * 20;
-            float dx = displace(lp + dt, t0 * 10 + t);
-            float dy = displace(lp + dt, t0 * 10 + t - 100);
+            float dx = displace(lp + seed * 100, t0 * 10 + t);
+            float dy = displace(lp - seed * 100, t0 * 10 + t);
 
-//            v.vertex.xyz = lerp(_Point0, _Point1, lp) + float3(0, dx, dy);
-            float3 p0 = _Point0 + float3(nrand(t0, 4), nrand(t0, 5), nrand(t0, 6)) * 1 - 0.5;
-            float3 p1 = _Point1 + float3(nrand(t0, 7), nrand(t0, 8), nrand(t0, 9)) * 1 - 0.5;
-            v.vertex.xyz = lerp(p0, p1, lp + dt) + float3(0, dx, dy);
+            // calculate the position
+            v.vertex.xyz = lerp(p0, p1, lp) + float3(0, dx, dy);
 
-            v.color = _Color * intensity(t0);
+            // intensity at this vertex
+            v.color = _Color * intensity(t0 + seed);
         }
 
         void surf(Input IN, inout SurfaceOutputStandard o)
         {
-            clip(IN.color.r - 0.5);
+            clip(IN.color.r);
             o.Emission = IN.color.rgb;
         }
 

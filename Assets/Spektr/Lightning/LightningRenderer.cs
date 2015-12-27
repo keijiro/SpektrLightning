@@ -18,10 +18,20 @@ namespace Spektr
         [SerializeField]
         Vector3 _pointTo = Vector3.up * 5;
 
+        [SerializeField]
+        float _spread = 1.0f;
+
         [Space]
         [SerializeField]
         float _interval = 0.4f;
 
+        [SerializeField, Range(0, 1)]
+        float _length = 0.5f;
+
+        [SerializeField, Range(0, 1)]
+        float _lengthRandomness = 0.5f;
+
+        [Space]
         [SerializeField]
         float _noiseAmplitude1 = 0.05f;
 
@@ -74,22 +84,23 @@ namespace Spektr
             if (_materialProps == null)
                 _materialProps = new MaterialPropertyBlock();
 
-            _material.SetVector("_Point0", _pointFrom);
-            _material.SetVector("_Point1", _pointTo);
+            _material.SetVector("_Point0",
+                new Vector4(_pointFrom.x, _pointFrom.y, _pointFrom.z, _spread));
+
+            _material.SetVector("_Point1",
+                new Vector4(_pointTo.x, _pointTo.y, _pointTo.z, _spread));
+
             _material.SetVector("_Interval", new Vector2(0.01f, _interval - 0.01f));
+            _material.SetVector("_Length", new Vector2(1 - _lengthRandomness, 1) * _length);
+
             _material.SetVector("_NoiseAmplitude", new Vector2(_noiseAmplitude1, _noiseAmplitude2));
             _material.SetVector("_NoiseFrequency", new Vector2(_noiseFrequency1, _noiseFrequency2));
             _material.SetVector("_NoiseMotion", new Vector2(_noiseMotion1, _noiseMotion2));
             _material.SetColor("_Color", _color);
 
-            for (var i = 0; i < 20; i++)
-            {
-                _materialProps.SetFloat("_RandomSeed", 0.13f + i * 0.31f);
-                Graphics.DrawMesh(
-                    _mesh.sharedMesh, transform.localToWorldMatrix,
-                    _material, 0, null, 0, _materialProps
-                );
-            }
+            Graphics.DrawMesh(
+                _mesh.sharedMesh, transform.localToWorldMatrix,
+                _material, 0, null, 0, _materialProps);
         }
 
         #endregion

@@ -7,10 +7,12 @@ namespace Spektr
     [CustomEditor(typeof(LightningMesh))]
     public class LightningMeshEditor : Editor
     {
+        SerializedProperty _lineCount;
         SerializedProperty _vertexCount;
 
         void OnEnable()
         {
+            _lineCount = serializedObject.FindProperty("_lineCount");
             _vertexCount = serializedObject.FindProperty("_vertexCount");
         }
 
@@ -19,6 +21,7 @@ namespace Spektr
             serializedObject.Update();
 
             EditorGUI.BeginChangeCheck();
+            EditorGUILayout.PropertyField(_lineCount);
             EditorGUILayout.PropertyField(_vertexCount);
             var rebuild = EditorGUI.EndChangeCheck();
 

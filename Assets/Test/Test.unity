@@ -141,16 +141,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mesh: {fileID: 11400000, guid: ae28d7200908fb34ab683612d325defa, type: 2}
-  _pointFrom: {x: -3, y: 0, z: 0}
-  _pointTo: {x: 3, y: 0, z: 0}
-  _interval: .699999988
-  _noiseAmplitude1: 1.07000005
+  _pointFrom: {x: .200000003, y: 0, z: 0}
+  _pointTo: {x: 14, y: 0, z: 0}
+  _spread: 1
+  _interval: .200000003
+  _length: .850000024
+  _lengthRandomness: .800000012
+  _noiseAmplitude1: 1.20000005
   _noiseFrequency1: 1
-  _noiseMotion1: .200000003
-  _noiseAmplitude2: .219999999
-  _noiseFrequency2: 7
-  _noiseMotion2: 2.20000005
-  _color: {r: 6.76927042, g: 7.00000048, b: 5.71323586, a: 1}
+  _noiseMotion1: .100000001
+  _noiseAmplitude2: .119999997
+  _noiseFrequency2: 15
+  _noiseMotion2: 1
+  _color: {r: 4.08088303, g: 4.92393541, b: 5, a: 1}
   _shader: {fileID: 4800000, guid: 5f407f89f9b1b6a48a8b5352c16afef9, type: 3}
 --- !u!4 &598068532
 Transform:
@@ -417,7 +420,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1536493964}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c8d76155f53cfc45b4f02922de468b3, type: 3}
   m_Name: 
