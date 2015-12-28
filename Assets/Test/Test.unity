@@ -141,16 +141,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mesh: {fileID: 11400000, guid: ae28d7200908fb34ab683612d325defa, type: 2}
+  _throttle: .100000001
   _emitterPosition: {x: -8, y: 0, z: 0}
   _receiverPosition: {x: 8, y: 0, z: 0}
   _interval: .200000003
   _length: .850000024
   _lengthRandomness: .800000012
   _noiseAmplitude1: 1.20000005
-  _noiseFrequency1: 1
+  _noiseFrequency1: .100000001
   _noiseMotion1: .100000001
   _noiseAmplitude2: .119999997
-  _noiseFrequency2: 15
+  _noiseFrequency2: 1.5
   _noiseMotion2: 1
   _color: {r: 4.08088303, g: 4.92393541, b: 5, a: 1}
   _shader: {fileID: 4800000, guid: 5f407f89f9b1b6a48a8b5352c16afef9, type: 3}

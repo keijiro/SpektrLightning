@@ -11,6 +11,14 @@ namespace Spektr
         [SerializeField]
         LightningMesh _mesh;
 
+        [SerializeField, Range(0, 1)]
+        float _throttle = 0.1f;
+
+        public float throttle {
+            get { return _throttle; }
+            set { _throttle = value; }
+        }
+
         [Space]
         [SerializeField]
         Vector3 _emitterPosition = Vector3.right * -5;
@@ -97,6 +105,7 @@ namespace Spektr
 
             _material.SetVector("_Point0", p0);
             _material.SetVector("_Point1", p1);
+            _material.SetFloat("_Distance", (p1 - p0).magnitude);
 
             // make orthogonal axes
             var v0 = (p1 - p0).normalized;
@@ -109,6 +118,8 @@ namespace Spektr
             _material.SetVector("_Axis2", v2);
 
             // other params
+            _material.SetFloat("_Throttle", _throttle);
+
             _material.SetVector("_Interval", new Vector2(0.01f, _interval - 0.01f));
             _material.SetVector("_Length", new Vector2(1 - _lengthRandomness, 1) * _length);
 
