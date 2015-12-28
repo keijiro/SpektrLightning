@@ -9,17 +9,6 @@ namespace Spektr
         #region Exposed Parameters
 
         [SerializeField]
-        LightningMesh _mesh;
-
-        [SerializeField, Range(0, 1)]
-        float _throttle = 0.1f;
-
-        public float throttle {
-            get { return _throttle; }
-            set { _throttle = value; }
-        }
-
-        [SerializeField]
         Transform _emitterTransform;
 
         public Transform emitterTransform {
@@ -49,6 +38,14 @@ namespace Spektr
         public Vector3 receiverPosition {
             get { return _receiverTransform ? _receiverTransform.position : _receiverPosition; }
             set { _receiverPosition = value; }
+        }
+
+        [SerializeField, Range(0, 1)]
+        float _throttle = 0.1f;
+
+        public float throttle {
+            get { return _throttle; }
+            set { _throttle = value; }
         }
 
         [SerializeField]
@@ -107,6 +104,12 @@ namespace Spektr
             set { _color = value; }
         }
 
+        [SerializeField]
+        LightningMesh _mesh;
+
+        [SerializeField]
+        int _randomSeed;
+
         #endregion
 
         #region Private Resources
@@ -156,7 +159,6 @@ namespace Spektr
 
             // other params
             _material.SetFloat("_Throttle", _throttle);
-
             _material.SetVector("_Interval", new Vector2(0.01f, _pulseInterval - 0.01f));
             _material.SetVector("_Length", new Vector2(1 - _lengthRandomness, 1) * _boltLength);
 
@@ -165,6 +167,7 @@ namespace Spektr
             _material.SetVector("_NoiseMotion", new Vector2(1, 10) * _noiseMotion);
 
             _material.SetColor("_Color", _color);
+            _material.SetFloat("_Seed", _randomSeed * _mesh.lineCount);
 
             // draw lines
             Graphics.DrawMesh(

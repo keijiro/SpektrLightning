@@ -19,8 +19,6 @@
             fixed4 color : COLOR;
         };
 
-        float _Throttle;
-
         float3 _Point0;
         float3 _Point1;
         float _Distance;
@@ -29,6 +27,7 @@
         float3 _Axis1;
         float3 _Axis2;
 
+        float _Throttle;
         float2 _Interval;   // min, max
         float2 _Length;     // min, max
 
@@ -37,6 +36,7 @@
         float2 _NoiseMotion;
 
         fixed4 _Color;
+        float _Seed;
 
         // pseudo random number generator
         float nrand01(float seed, float salt)
@@ -67,7 +67,7 @@
         void vert(inout appdata_full v)
         {
             float pp01 = v.vertex.x; // position on the line segment [0-1]
-            float seed = v.vertex.y * 131.1; // random seed
+            float seed = (v.vertex.y + _Seed) * 131.1; // random seed
 
             // interval (length of cycle)
             float interval = lerp(_Interval.x, _Interval.y, nrand01(seed, 0));

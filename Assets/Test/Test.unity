@@ -140,12 +140,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27351f8a2de3e594c82df9a654aa9acf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mesh: {fileID: 11400000, guid: ae28d7200908fb34ab683612d325defa, type: 2}
-  _throttle: .100000001
   _emitterTransform: {fileID: 0}
   _emitterPosition: {x: -10, y: 0, z: 0}
   _receiverTransform: {fileID: 0}
   _receiverPosition: {x: 10, y: 0, z: 0}
+  _throttle: .100000001
   _pulseInterval: .200000003
   _boltLength: .850000024
   _lengthRandomness: .800000012
@@ -153,6 +152,8 @@ MonoBehaviour:
   _noiseFrequency: .100000001
   _noiseMotion: .100000001
   _color: {r: 4.08088303, g: 4.92393541, b: 5, a: 1}
+  _mesh: {fileID: 11400000, guid: ae28d7200908fb34ab683612d325defa, type: 2}
+  _randomSeed: 0
   _shader: {fileID: 4800000, guid: 5f407f89f9b1b6a48a8b5352c16afef9, type: 3}
 --- !u!4 &598068532
 Transform:

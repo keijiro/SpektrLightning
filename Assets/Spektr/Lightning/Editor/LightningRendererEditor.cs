@@ -7,15 +7,12 @@ namespace Spektr
     [CustomEditor(typeof(LightningRenderer))]
     class LightningRendererEditor : Editor
     {
-        SerializedProperty _mesh;
-
-        SerializedProperty _throttle;
-
         SerializedProperty _emitterTransform;
         SerializedProperty _emitterPosition;
         SerializedProperty _receiverTransform;
         SerializedProperty _receiverPosition;
 
+        SerializedProperty _throttle;
         SerializedProperty _pulseInterval;
         SerializedProperty _boltLength;
         SerializedProperty _lengthRandomness;
@@ -25,6 +22,8 @@ namespace Spektr
         SerializedProperty _noiseMotion;
 
         SerializedProperty _color;
+        SerializedProperty _mesh;
+        SerializedProperty _randomSeed;
 
         static GUIContent _textEmpty = new GUIContent();
         static GUIContent _textEmitter = new GUIContent("Emitter");
@@ -32,15 +31,12 @@ namespace Spektr
 
         void OnEnable()
         {
-            _mesh = serializedObject.FindProperty("_mesh");
-
-            _throttle = serializedObject.FindProperty("_throttle");
-
             _emitterTransform = serializedObject.FindProperty("_emitterTransform");
             _emitterPosition = serializedObject.FindProperty("_emitterPosition");
             _receiverTransform = serializedObject.FindProperty("_receiverTransform");
             _receiverPosition = serializedObject.FindProperty("_receiverPosition");
 
+            _throttle = serializedObject.FindProperty("_throttle");
             _pulseInterval = serializedObject.FindProperty("_pulseInterval");
             _boltLength = serializedObject.FindProperty("_boltLength");
             _lengthRandomness = serializedObject.FindProperty("_lengthRandomness");
@@ -50,17 +46,13 @@ namespace Spektr
             _noiseMotion = serializedObject.FindProperty("_noiseMotion");
 
             _color = serializedObject.FindProperty("_color");
+            _mesh = serializedObject.FindProperty("_mesh");
+            _randomSeed = serializedObject.FindProperty("_randomSeed");
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-
-
-            EditorGUILayout.PropertyField(_mesh);
-            EditorGUILayout.PropertyField(_throttle);
-
-            EditorGUILayout.Space();
 
             EditorGUILayout.PropertyField(_emitterTransform, _textEmitter);
             if (_emitterTransform.hasMultipleDifferentValues ||
@@ -76,6 +68,7 @@ namespace Spektr
 
             EditorGUILayout.Space();
 
+            EditorGUILayout.PropertyField(_throttle);
             EditorGUILayout.PropertyField(_pulseInterval);
             EditorGUILayout.PropertyField(_boltLength);
             EditorGUILayout.PropertyField(_lengthRandomness);
@@ -89,6 +82,8 @@ namespace Spektr
             EditorGUILayout.Space();
 
             EditorGUILayout.PropertyField(_color);
+            EditorGUILayout.PropertyField(_mesh);
+            EditorGUILayout.PropertyField(_randomSeed);
 
             serializedObject.ApplyModifiedProperties();
         }
