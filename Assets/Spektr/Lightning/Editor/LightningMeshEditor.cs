@@ -66,7 +66,7 @@ namespace Spektr
                 path = path.Replace(Path.GetFileName(AssetDatabase.GetAssetPath(Selection.activeObject)), "");
             var assetPathName = AssetDatabase.GenerateUniqueAssetPath(path + "/LightningMesh.asset");
 
-            // Create an NoiseBballMesh asset.
+            // Create an asset.
             var asset = ScriptableObject.CreateInstance<LightningMesh>();
             AssetDatabase.CreateAsset(asset, assetPathName);
             AssetDatabase.AddObjectToAsset(asset.sharedMesh, asset);
