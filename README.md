@@ -17,8 +17,9 @@ System Requirements
 
 Unity 5.1 or later versions.
 
-Although it might work on all the supported platforms in Unity, it's almost
-meaningless without HDR bloom effect.
+It's strongly recommended to use with HDR bloom effects. Although the shader
+might work on mobile platforms, it's difficult to use without a HDR render
+target and linear rendering.
 
 License
 -------
