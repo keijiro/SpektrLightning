@@ -19,56 +19,93 @@ namespace Spektr
             set { _throttle = value; }
         }
 
-        [Space]
+        [SerializeField]
+        Transform _emitterTransform;
+
+        public Transform emitterTransform {
+            get { return _emitterTransform; }
+            set { _emitterTransform = value; }
+        }
+
         [SerializeField]
         Vector3 _emitterPosition = Vector3.right * -5;
 
         public Vector3 emitterPosition {
-            get { return _emitterPosition; }
+            get { return _emitterTransform ? _emitterTransform.position : _emitterPosition; }
             set { _emitterPosition = value; }
+        }
+
+        [SerializeField]
+        Transform _receiverTransform;
+
+        public Transform receiverTransform {
+            get { return _receiverTransform; }
+            set { _receiverTransform = value; }
         }
 
         [SerializeField]
         Vector3 _receiverPosition = Vector3.right * 5;
 
         public Vector3 receiverPosition {
-            get { return _receiverPosition; }
+            get { return _receiverTransform ? _receiverTransform.position : _receiverPosition; }
             set { _receiverPosition = value; }
         }
 
-        [Space]
         [SerializeField]
-        float _interval = 0.4f;
+        float _pulseInterval = 0.2f;
+
+        public float pulseInterval {
+            get { return _pulseInterval; }
+            set { _pulseInterval = value; }
+        }
 
         [SerializeField, Range(0, 1)]
-        float _length = 0.5f;
+        float _boltLength = 0.85f;
+
+        public float boltLength {
+            get { return _boltLength; }
+            set { _boltLength = value; }
+        }
 
         [SerializeField, Range(0, 1)]
-        float _lengthRandomness = 0.5f;
+        float _lengthRandomness = 0.8f;
 
-        [Space]
-        [SerializeField]
-        float _noiseAmplitude1 = 0.05f;
-
-        [SerializeField]
-        float _noiseFrequency1 = 1.0f;
+        public float lengthRandomness {
+            get { return _lengthRandomness; }
+            set { _lengthRandomness = value; }
+        }
 
         [SerializeField]
-        float _noiseMotion1 = 0.2f;
+        float _noiseAmplitude = 1.2f;
 
-        [Space]
-        [SerializeField]
-        float _noiseAmplitude2 = 0.05f;
-
-        [SerializeField]
-        float _noiseFrequency2 = 1.0f;
+        public float noiseAmplitude {
+            get { return _noiseAmplitude; }
+            set { _noiseAmplitude = value; }
+        }
 
         [SerializeField]
-        float _noiseMotion2 = 0.2f;
+        float _noiseFrequency = 0.1f;
 
-        [Space]
+        public float noiseFrequency {
+            get { return _noiseFrequency; }
+            set { _noiseFrequency = value; }
+        }
+
+        [SerializeField]
+        float _noiseMotion = 0.1f;
+
+        public float noiseMotion {
+            get { return _noiseMotion; }
+            set { _noiseMotion = value; }
+        }
+
         [SerializeField, ColorUsage(false, true, 0, 16, 0.125f, 3)]
         Color _color = Color.white;
+
+        public Color color {
+            get { return _color; }
+            set { _color = value; }
+        }
 
         #endregion
 
@@ -100,8 +137,8 @@ namespace Spektr
                 _materialProps = new MaterialPropertyBlock();
 
             // emitter/receiver position in the world space
-            var p0 = transform.InverseTransformPoint(_emitterPosition);
-            var p1 = transform.InverseTransformPoint(_receiverPosition);
+            var p0 = transform.InverseTransformPoint(emitterPosition);
+            var p1 = transform.InverseTransformPoint(receiverPosition);
 
             _material.SetVector("_Point0", p0);
             _material.SetVector("_Point1", p1);
@@ -120,12 +157,12 @@ namespace Spektr
             // other params
             _material.SetFloat("_Throttle", _throttle);
 
-            _material.SetVector("_Interval", new Vector2(0.01f, _interval - 0.01f));
-            _material.SetVector("_Length", new Vector2(1 - _lengthRandomness, 1) * _length);
+            _material.SetVector("_Interval", new Vector2(0.01f, _pulseInterval - 0.01f));
+            _material.SetVector("_Length", new Vector2(1 - _lengthRandomness, 1) * _boltLength);
 
-            _material.SetVector("_NoiseAmplitude", new Vector2(_noiseAmplitude1, _noiseAmplitude2));
-            _material.SetVector("_NoiseFrequency", new Vector2(_noiseFrequency1, _noiseFrequency2));
-            _material.SetVector("_NoiseMotion", new Vector2(_noiseMotion1, _noiseMotion2));
+            _material.SetVector("_NoiseAmplitude", new Vector2(1, 0.1f) * _noiseAmplitude);
+            _material.SetVector("_NoiseFrequency", new Vector2(1, 10) * _noiseFrequency);
+            _material.SetVector("_NoiseMotion", new Vector2(1, 10) * _noiseMotion);
 
             _material.SetColor("_Color", _color);
 
@@ -138,8 +175,8 @@ namespace Spektr
         void OnDrawGizmos()
         {
             Gizmos.color = new Color(1, 1, 0, 0.2f);
-            Gizmos.DrawSphere(_emitterPosition, _noiseAmplitude1);
-            Gizmos.DrawSphere(_receiverPosition, _noiseAmplitude1);
+            Gizmos.DrawSphere(emitterPosition, _noiseAmplitude);
+            Gizmos.DrawSphere(receiverPosition, _noiseAmplitude);
         }
 
         #endregion

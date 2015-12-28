@@ -8,14 +8,14 @@ namespace Spektr
         #region Public Properties
 
         [SerializeField]
-        int _lineCount = 24;
+        int _lineCount = 20;
 
         public int lineCount {
             get { return _lineCount; }
         }
 
         [SerializeField]
-        int _vertexCount = 32;
+        int _vertexCount = 30;
 
         public int vertexCount {
             get { return _vertexCount; }
@@ -81,7 +81,7 @@ namespace Spektr
             if (_mesh == null)
             {
                 _mesh = new Mesh();
-                _mesh.name = "Line";
+                _mesh.name = "Lines";
             }
         }
 
