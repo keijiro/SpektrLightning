@@ -122,6 +122,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 598068532}
   - 114: {fileID: 598068531}
+  - 114: {fileID: 598068533}
   m_Layer: 0
   m_Name: Lightning
   m_TagString: Untagged
@@ -145,9 +146,9 @@ MonoBehaviour:
   _receiverTransform: {fileID: 0}
   _receiverPosition: {x: 10, y: 0, z: 0}
   _throttle: .100000001
-  _pulseInterval: .200000003
-  _boltLength: .850000024
-  _lengthRandomness: .800000012
+  _pulseInterval: .300000012
+  _boltLength: .800000012
+  _lengthRandomness: .899999976
   _noiseAmplitude: 1.20000005
   _noiseFrequency: .100000001
   _noiseMotion: .100000001
@@ -167,6 +168,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+--- !u!114 &598068533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 598068530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37df4eb032eb346aabc3e932f541ffe3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &807250676
 GameObject:
   m_ObjectHideFlags: 0
@@ -358,14 +370,14 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1536493964}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c8d76155f53cfc45b4f02922de468b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _subject: {fileID: 0}
-  _distance: 23
-  _fNumber: .400000006
+  _distance: 20
+  _fNumber: .800000012
   _useCameraFov: 1
   _focalLength: .0500000007
   _maxBlur: .0329999998
