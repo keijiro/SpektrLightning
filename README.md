@@ -17,9 +17,15 @@ System Requirements
 
 Unity 5.1 or later versions.
 
-It's strongly recommended to use with HDR bloom effects. Although the shader
-might work on mobile platforms, it's difficult to use without a HDR render
-target and linear rendering.
+*Lightning* only draws line segments of electric bolts, therefore it’s strongly
+recommended to use with a [HDR bloom image effect][bloom] to add glow around the
+line segments.
+
+The *Lightning* shader only requires Shader Model 3.0 and might work on mobile
+GPUs. However, it's not very practical to use with previous generation GPUs,
+because it’s difficult to use without a HDR render target and linear rendering.
+
+[bloom]: https://github.com/keijiro/KinoBloom
 
 License
 -------
